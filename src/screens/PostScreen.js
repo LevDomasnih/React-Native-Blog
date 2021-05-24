@@ -5,7 +5,6 @@ import THEME from "../theme";
 
 const PostScreen = ({route, navigation }) => {
     const {postId} = route.params
-    console.log(postId, navigation)
 
     const post = DATA.find(p => p.id === postId)
 
