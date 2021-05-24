@@ -1,20 +1,20 @@
 import React from "react";
-import {FlatList, StyleSheet, Text, View} from "react-native";
+import {FlatList, StyleSheet, View} from "react-native";
 import {DATA} from "../data";
 import Post from "../components/Post";
 
 const MainScreen = (props) => {
 
-    const goToPost = () => {
-        console.log(props)
-        props.navigation.navigate("About")
+    const penPostHandler = (post) => {
+        console.log(post)
+        props.navigation.navigate("Post", {postId: post.id, date: post.date})
     }
     return (
         <View style={styles.wrapper}>
             <FlatList
                 data={DATA}
                 keyExtractor={post => post.id.toString()}
-                renderItem={({item}) => <Post post={item}/>}
+                renderItem={({item}) => <Post post={item} onOpen={penPostHandler}/>}
                 />
         </View>
     )
