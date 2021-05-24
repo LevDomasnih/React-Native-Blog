@@ -6,7 +6,6 @@ import Post from "../components/Post";
 const MainScreen = (props) => {
 
     const penPostHandler = (post) => {
-        console.log(post)
         props.navigation.navigate("Post", {postId: post.id, date: post.date})
     }
     return (

@@ -3,8 +3,10 @@ import {NavigationContainer} from "@react-navigation/native";
 import MainScreen from "../screens/MainScreen";
 import {createStackNavigator} from "@react-navigation/stack";
 import THEME from "../theme";
-import {Platform} from "react-native";
+import {Alert, Platform} from "react-native";
 import PostScreen from "../screens/PostScreen";
+import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import AppHeaderIcon from "../components/AppHeaderIcon";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +21,15 @@ export default function AppNavigation() {
                         headerStyle: {
                             backgroundColor: Platform.OS === "android" ? THEME.MAIN_COLOR : "#fff"
                         },
+                        headerRight: () => (
+                            <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                                <Item
+                                    title='Take photo'
+                                    iconName="ios-camera"
+                                    onPress={() => Alert.alert("Take photo")}
+                                />
+                            </HeaderButtons>
+                        ),
                         headerTintColor: Platform.OS === "android" ? "#fff" : THEME.MAIN_COLOR
                     }}
                     component={MainScreen}
@@ -28,7 +39,7 @@ export default function AppNavigation() {
                     component={PostScreen}
                     options={({route}) =>
                         ({
-                            title: `Пост от ${new Date(route.params.date).toLocaleDateString() }`,
+                            headerTitle: `Пост от ${new Date(route.params.date).toLocaleDateString()}`,
                             headerStyle: {
                                 backgroundColor: Platform.OS === "android" ? THEME.MAIN_COLOR : "#fff"
                             },
