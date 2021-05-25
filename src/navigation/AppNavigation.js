@@ -3,7 +3,6 @@ import {NavigationContainer} from "@react-navigation/native";
 import MainScreen from "../screens/MainScreen";
 import {createStackNavigator} from "@react-navigation/stack";
 import THEME from "../theme";
-import {Alert} from "react-native";
 import PostScreen from "../screens/PostScreen";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import AppHeaderIcon from "../components/AppHeaderIcon";
@@ -15,10 +14,14 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import CreateScreen from "../screens/CreateScreen";
 import AboutScreen from "../screens/AboutScreen";
+import {useDispatch} from "react-redux";
+import {toggleBooked} from "../store/reducers/postReducer";
 
 const Main = createStackNavigator();
 
 const MainLayout = (props) => {
+    const dispatch = useDispatch()
+
     return (
         <Main.Navigator initialRouteName="Main">
             <Main.Screen
@@ -54,7 +57,7 @@ const MainLayout = (props) => {
                 name='Post'
                 component={PostScreen}
                 options={({route}) => {
-                    const {booked, date} = route.params
+                    const {booked, date, postId} = route.params
                     const iconName = booked ? "ios-star" : "ios-star-outline"
                     return {
                         headerTitle: `Пост от ${new Date(date).toLocaleDateString()}`,
@@ -66,7 +69,7 @@ const MainLayout = (props) => {
                                 <Item
                                     title='Take photo'
                                     iconName={iconName}
-                                    onPress={() => Alert.alert("Take photo")}
+                                    onPress={() => dispatch(toggleBooked(postId))}
                                 />
                             </HeaderButtons>
                         ),

@@ -1,12 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Alert, Button, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {DATA} from "../data";
 import THEME from "../theme";
+import {useSelector} from "react-redux";
 
 const PostScreen = ({route, navigation }) => {
     const {postId} = route.params
 
     const post = DATA.find(p => p.id === postId)
+
+    const booked = useSelector(({post}) => post.bookedPosts.some(post => post.id === postId))
+
+    useEffect(() => {
+        navigation.setParams({booked})
+    }, [booked])
 
     const removeHandler = () => {
         Alert.alert(
