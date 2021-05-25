@@ -18,11 +18,11 @@ const CreateScreen = ({navigation}) => {
     const dispatch = useDispatch()
     const imgRef = useRef()
 
-    const lastId = useSelector(state => state.post.allPosts.sort((a, b) => a.id < b.id)[0].id)
+    const lastId = useSelector(state => state.post.allPosts.length ? String(+state.post.allPosts.sort((a, b) => a.id < b.id)[0].id + 1) : String(0))
 
     const saveHandler = () => {
         const post = {
-            id: String(+lastId + 1) || String(0),
+            id: lastId,
             date: new Date().toJSON(),
             text,
             img: imgRef.current,
