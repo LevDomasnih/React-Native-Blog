@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {
     Button,
-    Image,
     Keyboard,
     ScrollView,
     StyleSheet,
@@ -12,19 +11,21 @@ import {
 } from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {addPost} from "../store/reducers/postReducer";
+import PhotoPicker from "../components/PhotoPicker";
 
 const CreateScreen = ({navigation}) => {
     const [text, setText] = useState('')
     const dispatch = useDispatch()
+    const imgRef = useRef()
+
     const lastId = useSelector(state => state.post.allPosts.sort((a, b) => a.id < b.id)[0].id)
-    const img = 'https://static.coindesk.com/wp-content/uploads/2019/01/shutterstock_1012724596-860x430.jpg'
 
     const saveHandler = () => {
         const post = {
             id: String(+lastId + 1) || String(0),
             date: new Date().toJSON(),
             text,
-            img,
+            img: imgRef.current,
             booked: false
         }
         dispatch(addPost(post))
@@ -32,6 +33,9 @@ const CreateScreen = ({navigation}) => {
         navigation.navigate('Main')
     }
 
+    const photoPickHandler = (uri) => {
+        imgRef.current = uri
+    }
 
     return (
         <ScrollView>
@@ -47,13 +51,10 @@ const CreateScreen = ({navigation}) => {
                         onChangeText={setText}
                         multiline
                     />
-                    <Image
-                        style={{width: "100%", height: 200, marginBottom: 10}}
-                        source={{uri: img}}
-                    />
+                    <PhotoPicker onPick={photoPickHandler}/>
                     <Button
                         title="Create post"
-                        disabled={text.length === 0}
+                        disabled={!text}
                         onPress={saveHandler}
                     />
                 </View>
