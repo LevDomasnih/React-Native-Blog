@@ -1,18 +1,23 @@
 import React, {useEffect} from "react";
 import {Alert, Button, Image, ScrollView, StyleSheet, Text, View} from "react-native";
-import {DATA} from "../data";
 import THEME from "../theme";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {removePost} from "../store/reducers/postReducer";
 
 const PostScreen = ({route, navigation }) => {
     const {postId} = route.params
 
-    const post = DATA.find(p => p.id === postId)
+    const dispatch = useDispatch()
 
+    const {allPosts} = useSelector(({post}) => post)
     const booked = useSelector(({post}) => post.bookedPosts.some(post => post.id === postId))
 
+    const post = allPosts.find(p => p.id === postId)
+
     useEffect(() => {
-        navigation.setParams({booked})
+        if (post) {
+            navigation.setParams({booked})
+        }
     }, [booked])
 
     const removeHandler = () => {
@@ -27,12 +32,17 @@ const PostScreen = ({route, navigation }) => {
                 {
                     text: "Delete",
                     style: "destructive",
-                    onPress: () => {}
+                    onPress: () => {
+                        navigation.goBack()
+                        dispatch(removePost(postId))
+                    }
                 }
             ],
             {cancelable: false}
         );
     }
+
+    if (!post) return null
 
     return (
         <ScrollView>
