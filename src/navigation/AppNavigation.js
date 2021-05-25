@@ -19,7 +19,6 @@ import AboutScreen from "../screens/AboutScreen";
 const Main = createStackNavigator();
 
 const MainLayout = (props) => {
-    console.log(props)
     return (
         <Main.Navigator initialRouteName="Main">
             <Main.Screen
@@ -34,7 +33,7 @@ const MainLayout = (props) => {
                             <Item
                                 title='Take photo'
                                 iconName="ios-camera"
-                                onPress={() => Alert.alert("Take photo")}
+                                onPress={() => props.navigation.jumpTo("Create")}
                             />
                         </HeaderButtons>
                     ),
@@ -43,7 +42,7 @@ const MainLayout = (props) => {
                             <Item
                                 title='Take photo'
                                 iconName="ios-menu"
-                                onPress={() => Alert.alert("Take photo")}
+                                onPress={() => props.navigation.toggleDrawer()}
                             />
                         </HeaderButtons>
                     ),
@@ -79,17 +78,53 @@ const MainLayout = (props) => {
     )
 }
 
-const Drawer = createDrawerNavigator();
+const Create = createStackNavigator();
 
-const DrawerNavigator = () => {
+const CreateLayout = (props) => {
     return (
-        <Drawer.Navigator>
-            <Drawer.Screen name="Create" component={CreateScreen} />
-            <Drawer.Screen name="About" component={AboutScreen} />
-        </Drawer.Navigator>
-    );
+        <Create.Navigator>
+            <Create.Screen name="Create" component={CreateScreen} options={{
+                headerStyle: {
+                    backgroundColor: withPlatform(THEME.MAIN_COLOR, "#fff")
+                },
+                headerLeft: () => (
+                    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                        <Item
+                            title='Take photo'
+                            iconName="ios-menu"
+                            onPress={() => props.navigation.toggleDrawer()}
+                        />
+                    </HeaderButtons>
+                ),
+                headerTintColor: withPlatform("#fff", THEME.MAIN_COLOR)
+            }} />
+        </Create.Navigator>
+    )
 }
 
+const About = createStackNavigator();
+
+const AboutLayout = (props) => {
+    return (
+        <About.Navigator>
+            <About.Screen name="About" component={AboutScreen} options={{
+                headerStyle: {
+                    backgroundColor: withPlatform(THEME.MAIN_COLOR, "#fff")
+                },
+                headerLeft: () => (
+                    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+                        <Item
+                            title='Take photo'
+                            iconName="ios-menu"
+                            onPress={() => props.navigation.toggleDrawer()}
+                        />
+                    </HeaderButtons>
+                ),
+                headerTintColor: withPlatform("#fff", THEME.MAIN_COLOR)
+            }} />
+        </About.Navigator>
+    )
+}
 
 const Booked = createStackNavigator();
 
@@ -108,27 +143,37 @@ const BookedLayout = () => {
                 name="bookedPost"
                 component={PostScreen}
                 options={({route}) => {
-                    const {booked, date, postId} = route.params
-                    const iconName = booked ? "ios-star" : "ios-star-outline"
+                    const {postId} = route.params
                     return {
                         headerTitle: `Favorite post - ${postId}`,
                         headerStyle: {
                             backgroundColor: withPlatform(THEME.MAIN_COLOR, "#fff")
                         },
-                        headerRight: () => (
-                            <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-                                <Item
-                                    title='Favorite'
-                                    iconName={iconName}
-                                    onPress={() => Alert.alert("Take photo")}
-                                />
-                            </HeaderButtons>
-                        ),
                         headerTintColor: withPlatform("#fff", THEME.MAIN_COLOR)
                     }
                 }}/>
         </Booked.Navigator>
     )
+}
+
+const Drawer = createDrawerNavigator();
+
+const DrawerNavigator = () => {
+    return (
+        <Drawer.Navigator initialRouteName="Main" drawerContentOptions={{
+            activeTintColor: THEME.MAIN_COLOR,
+            labelStyle: {
+                fontFamily: "OpenSans-Bold"
+            }
+        }}>
+            <Drawer.Screen name="Main" component={MainLayout} options={{
+                drawerLabel: "My blog",
+                drawerIcon: () => <Ionicons name="ios-star" />
+            }} />
+            <Drawer.Screen name="Create" component={CreateLayout} />
+            <Drawer.Screen name="About" component={AboutLayout} />
+        </Drawer.Navigator>
+    );
 }
 
 const Tab = withPlatform(createMaterialBottomTabNavigator, createBottomTabNavigator)();
@@ -145,7 +190,7 @@ export default function AppNavigation() {
             >
                 <Tab.Screen
                     name="Main"
-                    component={MainLayout}
+                    component={DrawerNavigator}
                     options={{
                         tabBarIcon: (info) => <Ionicons name='ios-albums' size={25} color={info.color}/>
                     }}
