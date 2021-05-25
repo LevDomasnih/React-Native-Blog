@@ -18,6 +18,7 @@
     "@types/react-native": "^0.64.5",
     "expo": "~41.0.1",
     "expo-app-loading": "^1.0.3",
+    "expo-camera": "~11.0.2",
     "expo-font": "^9.1.0",
     "expo-image-picker": "~10.1.4",
     "expo-permissions": "~12.0.1",

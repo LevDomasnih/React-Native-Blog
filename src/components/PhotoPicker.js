@@ -1,13 +1,9 @@
 import React, {useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import {Alert, Button, Image, StyleSheet, View} from "react-native";
 
 const askForPermissions = async () => {
-    const {status} = await Permissions.askAsync(
-        Permissions.CAMERA,
-        Permissions.MEDIA_LIBRARY
-    )
+    const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
         Alert.alert("Warning", "No access to make photo")
         return false
