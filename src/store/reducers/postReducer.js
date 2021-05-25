@@ -1,5 +1,3 @@
-import {DATA} from "../../data";
-
 const LOAD_POSTS = "LOAD_POSTS"
 const TOGGLE_BOOKED = "TOGGLE_BOOKED"
 const REMOVE_POST = "REMOVE_POST"
@@ -45,7 +43,7 @@ const postReducer = (state = initialState, action) => {
 
 export default postReducer
 
-export const loadPosts = () => ({type: LOAD_POSTS, payload: DATA})
+export const loadPosts = () => ({type: LOAD_POSTS, payload: []})
 export const toggleBooked = (id) => ({type: TOGGLE_BOOKED, payload: id})
 export const removePost = (id) => ({type: REMOVE_POST, payload: id})
 export const addPost = (post) => ({type: ADD_POST, payload: post})

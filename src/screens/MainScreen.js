@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
-import {FlatList, StyleSheet, View} from "react-native";
-import Post from "../components/Post";
+import {StyleSheet} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {loadPosts} from "../store/reducers/postReducer";
+import AppFlatList from "../components/AppFlatList";
 
 const MainScreen = (props) => {
 
@@ -14,26 +14,13 @@ const MainScreen = (props) => {
 
     const {allPosts} = useSelector(({post}) => post)
 
-    const openPostHandler = (post) => {
-        props.navigation.navigate("Post", {postId: post.id, date: post.date, booked: post.booked})
-    }
-
     return (
-        <View style={styles.wrapper}>
-            <FlatList
-                data={allPosts}
-                keyExtractor={post => post.id.toString()}
-                renderItem={({item}) => <Post post={item} onOpen={openPostHandler}/>}
-                />
-        </View>
+        <AppFlatList posts={allPosts} navTo="Post" {...props} />
     )
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
-        flex: 1,
-        justifyContent: "center",
-    }
+
 })
 
 export default MainScreen
